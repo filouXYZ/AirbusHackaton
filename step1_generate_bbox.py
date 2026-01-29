@@ -24,7 +24,9 @@ CLUSTER_PARAMS = {
     # Il faut un eps énorme pour relier les points le long du fil.
     1: {'eps': 5.0, 'min_samples': 3},
     # Poteau : Souvent plus dense que les câbles, mais 0.8 était trop juste.
-    2: {'eps': 1, 'min_samples': 5},
+    #2: {'eps': 1, 'min_samples': 5}
+    #2: {'eps': 1.3, 'min_samples': 10},
+    2: {'eps': 1.3, 'min_samples': 15},
     # Turbine : C'est immense. On peut être large.
     3: {'eps': 9.0, 'min_samples': 20}
     #3: {'eps': 4.0, 'min_samples': 10}
@@ -36,7 +38,6 @@ CLUSTER_PARAMS = {
 def clean_lidar_points(df, max_distance_m=150.0):
     """Nettoie les points invalides (distance=0) et trop lointains."""
     df = df[df["distance_cm"] > 0]  # Retire les erreurs de tir
-    df = df[df["distance_cm"] <= max_distance_m * 100]  # Retire le décor lointain
     return df.reset_index(drop=True)
 
 
@@ -60,7 +61,7 @@ def process_file(file_path):
         return
 
     # 2. Nettoyage GLOBAL (Très important !)
-    df_full = clean_lidar_points(df_full,5000)
+    df_full = clean_lidar_points(df_full)
 
     # 3. Récupérer la liste des frames (poses)
     poses = lidar_utils.get_unique_poses(df_full)
@@ -110,12 +111,27 @@ def process_file(file_path):
 
                 # Sauvegarder l'info
                 detected_objects.append({
-                    'frame_idx': i,
-                    'ego_x': pose_row['ego_x'],  # Utile pour l'identifiant frame
+                    # --- Identifiants Frame (Requis) ---
+                    'pose_index': i,  # Utile pour toi (pour retrouver l'image)
+                    'ego_x': pose_row['ego_x'],  # Requis par les juges
+                    'ego_y': pose_row['ego_y'],  # Requis par les juges
+                    'ego_z': pose_row['ego_z'],  # Requis par les juges
+                    'ego_yaw': pose_row['ego_yaw'],  # Requis par les juges
+                    # --- Géométrie de la Boîte (Noms imposés par les juges) ---
+                    'bbox_center_x': center[0],
+                    'bbox_center_y': center[1],
+                    'bbox_center_z': center[2],
+
+                    'bbox_width': dims[0],  # size_x
+                    'bbox_length': dims[1],  # size_y
+                    'bbox_height': dims[2],  # size_z
+                    'bbox_yaw': 0.0,  # On ne gère pas la rotation pour l'instant (Axis Aligned)
+
+                    # --- Classe (Requis) ---
                     'class_id': class_id,
                     'class_label': CLASS_NAMES[class_id],
-                    'center_x': center[0], 'center_y': center[1], 'center_z': center[2],
-                    'size_x': dims[0], 'size_y': dims[1], 'size_z': dims[2],
+
+                    # --- Nombre de points de l'objet (Utile pour le tri, à supprimer plus tard) ---
                     'num_points': len(object_points)
                 })
 
