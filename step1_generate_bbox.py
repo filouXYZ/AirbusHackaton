@@ -26,9 +26,9 @@ CLUSTER_PARAMS = {
     # Poteau : Souvent plus dense que les câbles, mais 0.8 était trop juste.
     #2: {'eps': 1, 'min_samples': 5}
     #2: {'eps': 1.3, 'min_samples': 10},
-    2: {'eps': 1.3, 'min_samples': 15},
+    2: {'eps': 1.2, 'min_samples': 12},
     # Turbine : C'est immense. On peut être large.
-    3: {'eps': 9.0, 'min_samples': 20}
+    3: {'eps': 4.5, 'min_samples': 17}
     #3: {'eps': 4.0, 'min_samples': 10}
 }
 
