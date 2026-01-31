@@ -156,7 +156,7 @@ def process_file(file_path):
 
 if __name__ == "__main__":
     # CHANGE CE CHEMIN vers ton vrai fichier .h5
-    mon_fichier = "trainingdata/scene_1.h5"
+    mon_fichier = "trainingdata/scene_2.h5"
 
     if os.path.exists(mon_fichier):
         process_file(mon_fichier)
