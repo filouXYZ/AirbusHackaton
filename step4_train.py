@@ -60,7 +60,7 @@ def train():
         # --- PHASE D'APPRENTISSAGE ---
         loop = tqdm(train_loader, desc=f"Epoch {epoch + 1}/{EPOCHS} [Train]")
         for points, labels in loop:
-            points, labels = points.to(device), labels.to(device)
+            points, labels = points.to(device).float(), labels.to(device)
 
             # A. Remise à zéro des gradients
             optimizer.zero_grad()
@@ -93,7 +93,7 @@ def train():
 
         with torch.no_grad():  # Pas de calcul de gradient ici (économie RAM)
             for points, labels in val_loader:
-                points, labels = points.to(device), labels.to(device)
+                points, labels = points.to(device).float(), labels.to(device)
                 outputs = model(points)
                 _, predicted = torch.max(outputs.data, 1)
                 total_val += labels.size(0)
