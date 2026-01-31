@@ -30,6 +30,7 @@ def extract_objects(csv_path, data_root_dir):
     print(f"🚀 Début de l'extraction sur {len(grouped)} fichiers...")
 
     total_extracted = 0
+    skipped_empty = 0
 
     # BARRE 1 : Progression globale (Fichier par Fichier)
     # position=0 permet de la garder en haut
@@ -86,6 +87,7 @@ def extract_objects(csv_path, data_root_dir):
             points_inside = local_points[mask]
 
             if len(points_inside) < 5:
+                skipped_empty += 1
                 continue
 
             # Normalisation & Sauvegarde
@@ -98,6 +100,8 @@ def extract_objects(csv_path, data_root_dir):
             total_extracted += 1
 
     print(f"\n✅ TERMINÉ ! {total_extracted} objets extraits.")
+    print(f"🗑️  Objets vides ignorés : {skipped_empty}")
+    print(f"📁 Dossier de sortie : {os.path.abspath(OUTPUT_DIR)}")
 
 
 if __name__ == "__main__":
