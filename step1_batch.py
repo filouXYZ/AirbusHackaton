@@ -86,8 +86,10 @@ def process_dataset(input_dir, output_file):
                     center, dims = get_bbox_from_points(object_points)
 
                     # --- FILTRES pour empecher les objets d'etre inférieur à X metres ---
-                    #if class_id == 2 and dims[2] < 2.0: continue  # Poteau nain
-                    #if class_id == 1 and dims[0] < 0.5 and dims[1] < 0.5: continue  # Câble poussière
+                    if class_id == 0 and dims[2] < 1.0: continue  # Antenne naine
+                    if class_id == 1 and dims[0] < 0.5 and dims[1] < 0.5: continue  # Câble poussière
+                    if class_id == 2 and dims[2] < 2.0: continue  # Poteau nain
+                    if class_id == 3 and dims[2] < 3.0: continue  # Turbine naine
                     # ---------------------------
 
                     # Ajout à la liste globale
