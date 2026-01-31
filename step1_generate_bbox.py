@@ -60,6 +60,10 @@ def process_file(file_path):
         print(f"Erreur de chargement : {e}")
         return
 
+        # Optimisation RAM inutile
+    #for col in df_full.select_dtypes(include=['float64']).columns:
+    #    df_full[col] = df_full[col].astype('float32')
+
     # 2. Nettoyage GLOBAL (Très important !)
     df_full = clean_lidar_points(df_full)
 
