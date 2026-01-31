@@ -59,7 +59,9 @@ def evaluate():
     plt.ylabel('Vraie Classe')
     plt.xlabel('Classe Prédite par IA')
     plt.title('Matrice de Confusion (%)')
-    plt.show()
+    #plt.show()
+    plt.savefig("matrice_confusion.png")
+    print("✅ Graphique sauvegardé sous 'matrice_confusion.png'")
 
 
 if __name__ == "__main__":
