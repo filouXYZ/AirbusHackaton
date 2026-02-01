@@ -73,6 +73,14 @@ def process_dataset(input_dir, output_file):
 
                 if len(class_points) == 0: continue
 
+                # SÉCURITÉ ANTI-CRASH RAM
+                MAX_POINTS = 70000
+                if len(class_points) > MAX_POINTS:
+                    print(f"⚠️ Trop de points ({len(class_points)}), on échantillonne...")
+                    # On prend des indices au hasard
+                    indices = np.random.choice(len(class_points), MAX_POINTS, replace=False)
+                    class_points = class_points[indices]
+
                 params = CLUSTER_PARAMS[class_id]
                 clustering = DBSCAN(eps=params['eps'], min_samples=params['min_samples']).fit(class_points)
 

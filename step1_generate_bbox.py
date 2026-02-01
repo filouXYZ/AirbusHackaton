@@ -97,6 +97,14 @@ def process_file(file_path):
             if len(class_points) == 0:
                 continue  # Aucun objet de cette classe dans cette frame
 
+            # SÉCURITÉ ANTI-CRASH RAM
+            MAX_POINTS = 70000
+            if len(class_points) > MAX_POINTS:
+                print(f"⚠️ Trop de points ({len(class_points)}), on échantillonne...")
+                # On prend des indices au hasard
+                indices = np.random.choice(len(class_points), MAX_POINTS, replace=False)
+                class_points = class_points[indices]
+
             # --- LE CŒUR DU RÉACTEUR : DBSCAN ---
             params = CLUSTER_PARAMS[class_id]
             clustering = DBSCAN(eps=params['eps'], min_samples=params['min_samples']).fit(class_points)
@@ -156,7 +164,7 @@ def process_file(file_path):
 
 if __name__ == "__main__":
     # CHANGE CE CHEMIN vers ton vrai fichier .h5
-    mon_fichier = "trainingdata/scene_2.h5"
+    mon_fichier = "trainingdata/scene_5.h5"
 
     if os.path.exists(mon_fichier):
         process_file(mon_fichier)
